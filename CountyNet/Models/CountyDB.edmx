@@ -1,0 +1,302 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl" Namespace="CountyDB.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005">
+        <EntityContainer Name="CountyDBTargetContainer" >
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="CountyDB" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="CountyDBContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Users" EntityType="CountyDB.User" />
+          <AssociationSet Name="UserOrganisation" Association="CountyDB.UserRecord">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Record" EntitySet="Records" />
+          </AssociationSet>
+          <EntitySet Name="Records" EntityType="CountyDB.Record" />
+          <AssociationSet Name="OrganisationEvent" Association="CountyDB.OrganisationEvent">
+            <End Role="Organisation" EntitySet="Records" />
+            <End Role="Event" EntitySet="Records" />
+          </AssociationSet>
+          <EntitySet Name="OrganisationTypes" EntityType="CountyDB.OrganisationType" />
+          <AssociationSet Name="OrganisationOrganisationType" Association="CountyDB.OrganisationOrganisationType">
+            <End Role="Organisation" EntitySet="Records" />
+            <End Role="OrganisationType" EntitySet="OrganisationTypes" />
+          </AssociationSet>
+          <EntitySet Name="Categories" EntityType="CountyDB.Category" />
+          <AssociationSet Name="OrganisationOrganisationCategory" Association="CountyDB.OrganisationOrganisationCategory">
+            <End Role="Organisation" EntitySet="Records" />
+            <End Role="OrganisationCategory" EntitySet="Categories" />
+          </AssociationSet>
+          <AssociationSet Name="RecordCreatedBy" Association="CountyDB.RecordCreatedBy">
+            <End Role="Record" EntitySet="Records" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="ModifiedBy" Association="CountyDB.ModifiedBy">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Record" EntitySet="Records" />
+          </AssociationSet>
+          <EntitySet Name="OrganisationAccreditations" EntityType="CountyDB.OrganisationAccreditations" />
+          <AssociationSet Name="OrganisationOrganisationAccreditations" Association="CountyDB.OrganisationOrganisationAccreditations">
+            <End Role="Organisation" EntitySet="Records" />
+            <End Role="OrganisationAccreditations" EntitySet="OrganisationAccreditations" />
+          </AssociationSet>
+          <EntitySet Name="OrganisationTargetAudiences" EntityType="CountyDB.OrganisationTargetAudience" />
+          <AssociationSet Name="OrganisationOrganisationTargetAudience" Association="CountyDB.OrganisationOrganisationTargetAudience">
+            <End Role="Organisation" EntitySet="Records" />
+            <End Role="OrganisationTargetAudience" EntitySet="OrganisationTargetAudiences" />
+          </AssociationSet>
+          <EntitySet Name="OrganisationSpecialProvisions" EntityType="CountyDB.OrganisationSpecialProvision" />
+          <AssociationSet Name="OrganisationOrganisationSpecialProvision" Association="CountyDB.OrganisationOrganisationSpecialProvision">
+            <End Role="Organisation" EntitySet="Records" />
+            <End Role="OrganisationSpecialProvision" EntitySet="OrganisationSpecialProvisions" />
+          </AssociationSet>
+          <EntitySet Name="Authorities" EntityType="CountyDB.Authority" />
+          <EntitySet Name="OrganisationAreasCovered" EntityType="CountyDB.OrganisationAreaCovered" />
+          <AssociationSet Name="OrganisationAreaCoveredAuthority" Association="CountyDB.OrganisationAreaCoveredAuthority">
+            <End Role="OrganisationAreaCovered" EntitySet="OrganisationAreasCovered" />
+            <End Role="Authority" EntitySet="Authorities" />
+          </AssociationSet>
+          <AssociationSet Name="OrganisationOrganisationAreaCovered" Association="CountyDB.OrganisationOrganisationAreaCovered">
+            <End Role="Organisation" EntitySet="Records" />
+            <End Role="OrganisationAreaCovered" EntitySet="OrganisationAreasCovered" />
+          </AssociationSet>
+          <EntitySet Name="RecordStatus" EntityType="CountyDB.RecordStatus" />
+          <AssociationSet Name="RecordRecordStatus" Association="CountyDB.RecordRecordStatus">
+            <End Role="Record" EntitySet="Records" />
+            <End Role="RecordStatus" EntitySet="RecordStatus" />
+          </AssociationSet>
+          <AssociationSet Name="EventCategory" Association="CountyDB.EventCategory">
+            <End Role="Event" EntitySet="Records" />
+            <End Role="Category" EntitySet="Categories" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmailAddress" Type="String" Nullable="false" />
+          <NavigationProperty Name="Records" Relationship="CountyDB.UserRecord" FromRole="User" ToRole="Record" />
+          <NavigationProperty Name="CreatedRecords" Relationship="CountyDB.RecordCreatedBy" FromRole="User" ToRole="Record" />
+          <NavigationProperty Name="ModifiedRecords" Relationship="CountyDB.ModifiedBy" FromRole="User" ToRole="Record" />
+        </EntityType>
+        <EntityType Name="Record">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="User" Relationship="CountyDB.UserRecord" FromRole="Record" ToRole="User" />
+          <Property Name="Owner" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CreatedBy" Relationship="CountyDB.RecordCreatedBy" FromRole="Record" ToRole="User" />
+          <NavigationProperty Name="ModifiedBy" Relationship="CountyDB.ModifiedBy" FromRole="Record" ToRole="User" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="RecordStatus" Relationship="CountyDB.RecordRecordStatus" FromRole="Record" ToRole="RecordStatus" />
+        </EntityType>
+        <Association Name="UserRecord">
+          <End Type="CountyDB.User" Role="User" Multiplicity="1" />
+          <End Type="CountyDB.Record" Role="Record" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Record">
+              <PropertyRef Name="Owner" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Organisation" BaseType="CountyDB.Record">
+          <NavigationProperty Name="Events" Relationship="CountyDB.OrganisationEvent" FromRole="Organisation" ToRole="Event" />
+          <Property Name="OrganisationName" Type="String" Nullable="false" />
+          <Property Name="AlsoKnownAs" Type="String" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" />
+          <Property Name="Website" Type="String" Nullable="false" />
+          <Property Name="Facebook" Type="String" Nullable="false" />
+          <Property Name="Twitter" Type="String" Nullable="false" />
+          <NavigationProperty Name="OrganisationType" Relationship="CountyDB.OrganisationOrganisationType" FromRole="Organisation" ToRole="OrganisationType" />
+          <Property Name="Volunteering" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="OrganisationCategories" Relationship="CountyDB.OrganisationOrganisationCategory" FromRole="Organisation" ToRole="OrganisationCategory" />
+          <NavigationProperty Name="OrganisationAccreditations" Relationship="CountyDB.OrganisationOrganisationAccreditations" FromRole="Organisation" ToRole="OrganisationAccreditations" />
+          <NavigationProperty Name="OrganisationTargetAudiences" Relationship="CountyDB.OrganisationOrganisationTargetAudience" FromRole="Organisation" ToRole="OrganisationTargetAudience" />
+          <Property Name="MinAge" Type="Int16" Nullable="false" />
+          <Property Name="MaxAge" Type="Int16" Nullable="false" />
+          <NavigationProperty Name="OrganisationSpecialProvisions" Relationship="CountyDB.OrganisationOrganisationSpecialProvision" FromRole="Organisation" ToRole="OrganisationSpecialProvision" />
+          <NavigationProperty Name="OrganisationAreasCovered" Relationship="CountyDB.OrganisationOrganisationAreaCovered" FromRole="Organisation" ToRole="OrganisationAreaCovered" />
+          <Property Name="ContactName" Type="String" Nullable="false" />
+          <Property Name="ContactPosition" Type="String" Nullable="false" />
+          <Property Name="ContactTelephone" Type="String" Nullable="false" />
+          <Property Name="ContactAltTelephone" Type="String" Nullable="false" />
+          <Property Name="ContactEmail" Type="String" Nullable="false" />
+          <Property Name="SecondContact" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Event" BaseType="CountyDB.Record">
+          <NavigationProperty Name="Organisation" Relationship="CountyDB.OrganisationEvent" FromRole="Event" ToRole="Organisation" />
+          <Property Name="EventTitle" Type="String" Nullable="false" />
+          <Property Name="Details" Type="String" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" />
+          <Property Name="Time" Type="String" Nullable="false" />
+          <Property Name="Price" Type="String" Nullable="false" />
+          <Property Name="Website" Type="String" Nullable="false" />
+          <Property Name="Facebook" Type="String" Nullable="false" />
+          <Property Name="Twitter" Type="String" Nullable="false" />
+          <NavigationProperty Name="Categories" Relationship="CountyDB.EventCategory" FromRole="Event" ToRole="Category" />
+        </EntityType>
+        <Association Name="OrganisationEvent">
+          <End Type="CountyDB.Organisation" Role="Organisation" Multiplicity="1" />
+          <End Type="CountyDB.Event" Role="Event" Multiplicity="*" />
+        </Association>
+        <EntityType Name="OrganisationType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="Organisation" Relationship="CountyDB.OrganisationOrganisationType" FromRole="OrganisationType" ToRole="Organisation" />
+        </EntityType>
+        <Association Name="OrganisationOrganisationType">
+          <End Type="CountyDB.Organisation" Role="Organisation" Multiplicity="*" />
+          <End Type="CountyDB.OrganisationType" Role="OrganisationType" Multiplicity="1" />
+        </Association>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="Organisations" Relationship="CountyDB.OrganisationOrganisationCategory" FromRole="OrganisationCategory" ToRole="Organisation" />
+          <NavigationProperty Name="Events" Relationship="CountyDB.EventCategory" FromRole="Category" ToRole="Event" />
+        </EntityType>
+        <Association Name="OrganisationOrganisationCategory">
+          <End Type="CountyDB.Organisation" Role="Organisation" Multiplicity="*" />
+          <End Type="CountyDB.Category" Role="OrganisationCategory" Multiplicity="*" />
+        </Association>
+        <Association Name="RecordCreatedBy">
+          <End Type="CountyDB.Record" Role="Record" Multiplicity="*" />
+          <End Type="CountyDB.User" Role="User" Multiplicity="1" />
+        </Association>
+        <Association Name="ModifiedBy">
+          <End Type="CountyDB.User" Role="User" Multiplicity="1" />
+          <End Type="CountyDB.Record" Role="Record" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Record">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="OrganisationAccreditations">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="Organisations" Relationship="CountyDB.OrganisationOrganisationAccreditations" FromRole="OrganisationAccreditations" ToRole="Organisation" />
+        </EntityType>
+        <Association Name="OrganisationOrganisationAccreditations">
+          <End Type="CountyDB.Organisation" Role="Organisation" Multiplicity="*" />
+          <End Type="CountyDB.OrganisationAccreditations" Role="OrganisationAccreditations" Multiplicity="*" />
+        </Association>
+        <EntityType Name="OrganisationTargetAudience">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="Organisations" Relationship="CountyDB.OrganisationOrganisationTargetAudience" FromRole="OrganisationTargetAudience" ToRole="Organisation" />
+        </EntityType>
+        <Association Name="OrganisationOrganisationTargetAudience">
+          <End Type="CountyDB.Organisation" Role="Organisation" Multiplicity="*" />
+          <End Type="CountyDB.OrganisationTargetAudience" Role="OrganisationTargetAudience" Multiplicity="*" />
+        </Association>
+        <EntityType Name="OrganisationSpecialProvision">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="Organisations" Relationship="CountyDB.OrganisationOrganisationSpecialProvision" FromRole="OrganisationSpecialProvision" ToRole="Organisation" />
+        </EntityType>
+        <Association Name="OrganisationOrganisationSpecialProvision">
+          <End Type="CountyDB.Organisation" Role="Organisation" Multiplicity="*" />
+          <End Type="CountyDB.OrganisationSpecialProvision" Role="OrganisationSpecialProvision" Multiplicity="*" />
+        </Association>
+        <EntityType Name="Authority">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="OrganisationAreaCovereds" Relationship="CountyDB.OrganisationAreaCoveredAuthority" FromRole="Authority" ToRole="OrganisationAreaCovered" />
+        </EntityType>
+        <EntityType Name="OrganisationAreaCovered">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="Authority" Relationship="CountyDB.OrganisationAreaCoveredAuthority" FromRole="OrganisationAreaCovered" ToRole="Authority" />
+          <NavigationProperty Name="Organisations" Relationship="CountyDB.OrganisationOrganisationAreaCovered" FromRole="OrganisationAreaCovered" ToRole="Organisation" />
+        </EntityType>
+        <Association Name="OrganisationAreaCoveredAuthority">
+          <End Type="CountyDB.OrganisationAreaCovered" Role="OrganisationAreaCovered" Multiplicity="*" />
+          <End Type="CountyDB.Authority" Role="Authority" Multiplicity="1" />
+        </Association>
+        <Association Name="OrganisationOrganisationAreaCovered">
+          <End Type="CountyDB.Organisation" Role="Organisation" Multiplicity="*" />
+          <End Type="CountyDB.OrganisationAreaCovered" Role="OrganisationAreaCovered" Multiplicity="*" />
+        </Association>
+        <EntityType Name="RecordStatus">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <NavigationProperty Name="Records" Relationship="CountyDB.RecordRecordStatus" FromRole="RecordStatus" ToRole="Record" />
+        </EntityType>
+        <Association Name="RecordRecordStatus">
+          <End Type="CountyDB.Record" Role="Record" Multiplicity="*" />
+          <End Type="CountyDB.RecordStatus" Role="RecordStatus" Multiplicity="1" />
+        </Association>
+        <Association Name="EventCategory">
+          <End Type="CountyDB.Event" Role="Event" Multiplicity="*" />
+          <End Type="CountyDB.Category" Role="Category" Multiplicity="*" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs" Space="C-S">
+        <Alias Key="Model" Value="CountyDB" />
+        <Alias Key="Target" Value="CountyDB.Store" />
+        <EntityContainerMapping CdmEntityContainer="CountyDBContainer" StorageEntityContainer="CountyDBTargetContainer">
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
